@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pandemie-node-service
+spec:
+  type: NodePort
+  selector:
+    app: pandemie
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http
