@@ -14,10 +14,10 @@ Dieses Repository beeinhaltet die Lösung für den InformatiCup 2020 des Teams N
 Repository der Aufgabe: https://github.com/informatiCup/informatiCup2020
 </p>
 <p align="center">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/nicosc77/pandemie?style=for-the-badge">
- <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/flask?color=lightgrey&style=for-the-badge">
-  <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/tensorflow?color=yellow&style=for-the-badge">
-  <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/keras?color=red&style=for-the-badge">
+    <a href="https://www.python.org/"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/nicosc77/pandemie?style=for-the-badge"></a>
+ <a href="https://github.com/pallets/flask"> <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/flask?color=lightgrey&style=for-the-badge"></a>
+  <a href="https://github.com/tensorflow/tensorflow"> <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/tensorflow?color=yellow&style=for-the-badge"></a>
+  <a href="https://github.com/keras-team/keras"><img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/keras?color=red&style=for-the-badge"></a>
 </p>
 
 ## 🚀 Deployment
