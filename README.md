@@ -33,9 +33,9 @@ Mithilfe des Dockerfile im Root-Verzeichnis des Projekt lässt sich ein Image ba
  Zudem besteht die Möglichkeit die bereits laufende Anwendung über das Internet zu verwenden. Wir lassen dazu den Docker-Container auf einem Google Kubernetes Engine Cluster laufen. Die Anwendung hier ist unter der URL http://pandemie.nicolas-schaber.de zu erreichen.
 
 ## 🔧Testen
-Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL (Je nach Deployment-Methode) der Anwendung aus. Auf Unix- System muss das Tool eventuell zuerst ausführbar gemacht werden.
+Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL (Je nach Deployment-Methode) der Anwendung aus. Auf Unix-Systemen muss das Tool eventuell zuerst ausführbar gemacht werden.
 
-Hier z.B. für das lokale Deployment:
+Hier z.B. mit der URL für das lokale Deployment:
 - **Windows:**
   ```shell
   ic20_windows.exe -u "http://localhost:5000"
@@ -49,7 +49,7 @@ Hier z.B. für das lokale Deployment:
   ./ic20_darwin -u "http://localhost:5000"
   ```
 
-Anschließend spielt das Tool gegen unsere KI der Software ein Spiel. Nachdem entweder gewonnen oder verloren wurde wird das Tool beendet. Im Feld "outcome" lässt sich der Ausgang des Spiels durch "win" oder "loss" feststellen.
+Anschließend spielt das Tool gegen unsere KI der Software ein Spiel. Nachdem entweder gewonnen oder verloren wurde wird das Tool beendet. Im Feld "outcome" des Spiele-Logs lässt sich der Ausgang des Spiels durch "win" oder "loss" feststellen.
 
 ## 📄Dokumentation
 Genauere Informationen zu dieser Software ist in der [Dokumentation](Dokumentation.pdf) zu finden.
