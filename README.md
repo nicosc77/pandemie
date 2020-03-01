@@ -1,6 +1,3 @@
-<p align="center">
-    <img alt="Pandemie" src="https://nicolas-schaber.de/assets/logo.png" width="200" />
-</p>
 <h1 align="center">
   Pandemie
 </h1>
