@@ -29,11 +29,8 @@ Mithilfe des Dockerfile im Root-Verzeichnis des Projekt lässt sich ein Image ba
   docker run -p 5000:5000 -d pandemie
   ```
 
-- **Cloud-Plattform:**
- Zudem besteht die Möglichkeit die bereits laufende Anwendung über das Internet zu verwenden. Wir lassen dazu den Docker-Container auf einem Google Kubernetes Engine Cluster laufen. Die Anwendung hier ist unter der URL http://pandemie.nicolas-schaber.de zu erreichen.
-
 ## 🔧Testen
-Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL (Je nach Deployment-Methode) der Anwendung aus. Auf Unix-Systemen muss das Tool eventuell zuerst ausführbar gemacht werden.
+Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL der Anwendung aus. Auf Unix-Systemen muss das Tool eventuell zuerst ausführbar gemacht werden.
 
 Hier z.B. mit der URL für das lokale Deployment:
 - **Windows:**
