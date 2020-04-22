@@ -20,9 +20,6 @@ ENV PYTHONUNBUFFERED 1
 # Copy source
 COPY ./src .
 
-# Lint
-RUN flake8 .
-
 # Execute
 EXPOSE 5000
 CMD gunicorn --timeout 1000 --workers 4 --threads 4 --preload --log-level error --bind 0.0.0.0:5000 app:app

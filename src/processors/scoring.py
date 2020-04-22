@@ -82,11 +82,9 @@ def process_city(city, global_events):
         if isinstance(x, Uprising):
             government = government * 2 * (x.participants / city.population)
         if isinstance(x, AirportClosed):
-            connections = 0
-            pathogen = pathogen * 0.5
-        if isinstance(x, ConnectionClosed):
-            pathogen = pathogen * 0.6
             connections = connections * 0.2
+        if isinstance(x, ConnectionClosed):
+            connections = connections * 0.7
         if isinstance(x, AntiVaccinationism):
             awareness = awareness * 5 * population
         if isinstance(x, EconomicCrisis):
@@ -102,7 +100,7 @@ def process_city(city, global_events):
         if isinstance(x, MedicationDeployed):
             pathogen = pathogen * 0.8
 
-    scores = [hygiene, economy, awareness, government, connections,
+    scores = [hygiene * 1.15, economy * 1.15, awareness * 1.15, government * 1.15, connections,
               population * 1.5, pathogen * 2]
 
     return sum(scores)

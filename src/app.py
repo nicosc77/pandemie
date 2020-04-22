@@ -5,9 +5,11 @@ import subprocess
 
 from flask import Flask, request
 
+from model.actions import ApplyHygienicMesaures
 from model.gameround import GameRound
 from net import net
 from processors.scoring import score
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -37,14 +39,11 @@ def testNet():
             log.info('Testing with ' + str(count) + ' rounds...')
 
             if platform.system() == 'Darwin':
-                path = os.path.dirname(
-                    os.path.abspath(__file__)) + '/bin/ic20_darwin'
+                path = str(Path(__file__).parent.absolute().parent.absolute()) + '/bin/ic20_darwin'
             elif platform.system() == 'Linux':
-                path = os.path.dirname(
-                    os.path.abspath(__file__)) + '/bin/ic20_linux'
+                path = str(Path(__file__).parent.absolute().parent.absolute()) + '/bin/ic20_linux'
             else:
-                path = os.path.dirname(
-                    os.path.abspath(__file__)) + '/bin/ic20_windows'
+                path = str(Path(__file__).parent.absolute().parent.absolute()) + '/bin/ic20_windows'
 
             results = []
             for i in range(count):
@@ -90,14 +89,11 @@ def trainNet():
             for i in range(count):
                 log.info(str(i) + ' of ' + str(count) + ' games played')
                 if platform.system() == 'Darwin':
-                    path = os.path.dirname(
-                        os.path.abspath(__file__)) + '/bin/ic20_darwin'
+                    path = str(Path(__file__).parent.absolute().parent.absolute()) + '/bin/ic20_darwin'
                 elif platform.system() == 'Linux':
-                    path = os.path.dirname(
-                        os.path.abspath(__file__)) + '/bin/ic20_linux'
+                    path = str(Path(__file__).parent.absolute().parent.absolute()) +  '/bin/ic20_linux'
                 else:
-                    path = os.path.dirname(
-                        os.path.abspath(__file__)) + '/bin/ic20_windows'
+                    path = str(Path(__file__).parent.absolute().parent.absolute()) + '/bin/ic20_windows'
                 subprocess.run([path, '-u', 'http://localhost:' + str(
                     port) + '/dev/api/collect', '-t', '0'],
                                stdout=subprocess.DEVNULL)
@@ -134,6 +130,7 @@ def collectModel():
 
             # Collect training data
             action = net.collect(game_round)
+
             # Returning the action
             return action.getMessage()
     else:
@@ -176,7 +173,6 @@ def testModel():
 # Main endpoint for production
 @app.route('/', methods=['POST', 'GET'])
 def main():
-
     # Very ugly workaround because keras in this version
     # is messing up with tensorflow when multithreading is enabled
     import keras.backend.tensorflow_backend as tb
@@ -207,12 +203,10 @@ def main():
 if __name__ == '__main__':
     debug_env = False
     try:
-        if os.environ['DEBUG'] == 'True':
-            debug_env = True
-            log.setLevel(logging.INFO)
-        else:
-            debug_env = False
-            log.setLevel(logging.ERROR)
+
+        debug_env = True
+        log.setLevel(logging.INFO)
+
     except KeyError:
         pass
 

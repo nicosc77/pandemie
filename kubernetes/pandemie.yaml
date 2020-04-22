@@ -1,4 +1,3 @@
----
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
@@ -7,7 +6,7 @@ metadata:
   labels:
     app: "pandemie"
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: "pandemie"
@@ -18,27 +17,7 @@ spec:
     spec:
       containers:
       - name: "pandemie"
-        image: "gcr.io/icpandemie/pandemie"
+        image: "pandemie"
         ports:
           - name: http
             containerPort: 5000
----
-apiVersion: "autoscaling/v2beta1"
-kind: "HorizontalPodAutoscaler"
-metadata:
-  name: "pandemie-hpa"
-  namespace: "default"
-  labels:
-    app: "pandemie"
-spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "pandemie"
-    apiVersion: "apps/v1"
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      targetAverageUtilization: 80

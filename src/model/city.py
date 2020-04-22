@@ -16,6 +16,7 @@ class City:
         self.awareness = data['awareness']
         self.economy = data['economy']
         self.score = int
+        self.effective_action = {}
 
         self.events = []
         try:
@@ -23,3 +24,7 @@ class City:
                 self.events.append(process_event(event))
         except KeyError:
             pass
+
+    def __str__(self):
+        return self.name + ' awa ' + self.awareness + ' sco ' + str(self.score) + ' eco ' + \
+               self.economy + ' gov ' + self.government + ' hyg ' + self.hygiene
