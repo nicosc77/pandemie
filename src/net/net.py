@@ -35,13 +35,15 @@ def collect(game_round):
         app.log.info(str(previous_city) + str(current_city))
         app.log.info(previous_city.score - current_city.score)
 
-        if current_city.score + 0.3 < previous_city.score:
+        if current_city.score + 0.25 < previous_city.score:
             effect = previous_city.score - current_city.score
             if not isinstance(action, EndRound):
                 app.log.info('Action ' + str(
                     action.getMessage()) + ' had positive effect (' + str(
                     effect) + '), adding to training data')
-                training_data.append(cityprocessor.process_city(previous_city, action))
+                training_data.append(
+                    [cityprocessor.process_city(previous_city),
+                     action.getLabel()])
             else:
                 app.log.info('Action was EndRound, not adding data')
         else:
@@ -95,10 +97,10 @@ def build_model(input_size, output_size):
     model = Sequential()
     model.add(Dense(64, input_dim=input_size, activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(output_size, activation='softmax'))
-    model.compile(optimizer='adam', loss='categorical_crossentropy',
+    model.add(Dense(output_size, activation='sigmoid'))
+    model.compile(optimizer='adam', loss='binary_crossentropy',
                   metrics=['accuracy'])
     return model
 
@@ -107,6 +109,8 @@ def train_model(epochs):
     global training_data
     global trained_model
     global model_loaded
+
+    training_data = training_data.sample(frac=1, axis=0)
 
     app.log.info('Training model')
     x = np.array([i[0] for i in training_data]).reshape(-1, len(
