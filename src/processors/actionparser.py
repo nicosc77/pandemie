@@ -1,4 +1,5 @@
-import app
+import numpy
+
 from model.actions import ApplyHygienicMesaures, CloseAirport, CallElections, \
     DeployMedication, DeployVaccine, \
     DevelopMedication, DevelopVaccine, LaunchCampaign, PutUnderQuarantine, \
@@ -11,19 +12,14 @@ from model.events import Quarantine, ConnectionClosed, VaccineInDevelopment, \
 sorted_action_numbers = []
 
 
-# Extract the prdictions into a sorted array
-def process_number(arr, city, global_events, points, current_round, cities):
+# Extract the predictions into a sorted array
+def process_number(predictions, city, global_events, points, current_round, cities):
     global sorted_action_numbers
 
-    # Extract the predicted actions
-    sorted_action_numbers = (arr.argsort()[::-1]).tolist()
-
-    # Picking best action first
-    action_number = sorted_action_numbers[0]
-    app.log.info('Predicted actions: ' + str(sorted_action_numbers))
+    sorted_action_numbers = predictions
 
     # Start recursive action search
-    return choose(action_number, city, global_events, points, cities)
+    return choose(sorted_action_numbers[0], city, global_events, points, cities)
 
 
 def choose(action_number, city, global_events, points, cities):
@@ -31,10 +27,10 @@ def choose(action_number, city, global_events, points, cities):
 
     rounds = 1
 
-    if action_number == 9:
+    if action_number == 'applyHygienicMeasures':
         # Action: Apply hygienic measures
 
-        if city.hygiene == '++':
+        if city.hygiene == '++' or city.hygiene == '++':
             # Pass if hygine is good
             pass
         else:
@@ -48,10 +44,10 @@ def choose(action_number, city, global_events, points, cities):
                 # Saving the points if not enough available
                 return EndRound()
 
-    elif action_number == 8:
+    elif action_number == 'callElections':
         # Action: Call elections
 
-        if city.government == '++':
+        if city.government == '++' or city.government == '++':
             # Pass if govenment is good
             pass
         else:
@@ -65,7 +61,7 @@ def choose(action_number, city, global_events, points, cities):
                 # Saving the points if not enough available
                 return EndRound()
 
-    elif action_number == 7:
+    elif action_number == 'closeAirport':
         # Action: Close Airport
 
         if any(isinstance(x, AirportClosed) for x in city.events):
@@ -75,17 +71,20 @@ def choose(action_number, city, global_events, points, cities):
             # Calculating maximal amount of rounds
             rounds = CloseAirport.calculateRounds(points)
 
-            # Preparing action
-            action = CloseAirport(city, rounds)
-
-            if action.getPoints() < points:
-                # Return the action if enough points available
-                return action
-            else:
-                # Saving the points if not enough available
+            if rounds < 2:
                 return EndRound()
+            else:
+                # Preparing action
+                action = CloseAirport(city, rounds)
 
-    elif action_number == 6:
+                if action.getPoints() < points:
+                    # Return the action if enough points available
+                    return action
+                else:
+                    # Saving the points if not enough available
+                    return EndRound()
+
+    elif action_number == 'closeConnection':
         # Action: Close Airport Connection
 
         if any(isinstance(x, AirportClosed) for x in city.events):
@@ -116,7 +115,8 @@ def choose(action_number, city, global_events, points, cities):
                                         reverse=True).pop(1)
                 except IndexError:
                     # If no connection is suitable choose another action
-                    sorted_action_numbers.remove(action_number)
+                    index = numpy.argwhere(sorted_action_numbers == action_number)
+                    sorted_action_numbers = numpy.delete(sorted_action_numbers, index)
                     action_number = sorted_action_numbers[0]
                     return choose(action_number, city, global_events, points,
                                   cities)
@@ -134,7 +134,7 @@ def choose(action_number, city, global_events, points, cities):
                     # Saving the points if not enough available
                     return EndRound()
 
-    elif action_number == 5:
+    elif action_number == 'medication':
         # Action: Develop/Deploy Medication
 
         outbreaks = []
@@ -199,7 +199,7 @@ def choose(action_number, city, global_events, points, cities):
                     else:
                         return EndRound()
 
-    elif action_number == 4:
+    elif action_number == 'vaccine':
         # Action: Develop/Deploy Vaccine
 
         outbreaks = []
@@ -265,14 +265,9 @@ def choose(action_number, city, global_events, points, cities):
                     else:
                         return EndRound()
 
-    elif action_number == 3:
-        # Action: EndRound
-        # This action should never be used voluntarily
-        pass
+    elif action_number == 'exertInfluence':
 
-    elif action_number == 2:
-
-        if city.economy == '++':
+        if city.economy == '++' or city.economy == '++':
             pass
         else:
             action = ExertInfluence(city)
@@ -282,9 +277,9 @@ def choose(action_number, city, global_events, points, cities):
                 # print('Not enough points')
                 return EndRound()
 
-    elif action_number == 1:
+    elif action_number == 'launchCampaign':
 
-        if city.awareness == '++':
+        if city.awareness == '++' or city.awareness == '+':
             pass
         else:
             action = LaunchCampaign(city)
@@ -294,22 +289,27 @@ def choose(action_number, city, global_events, points, cities):
                 # print('Not enough points')
                 return EndRound()
 
-    elif action_number == 0:
+    elif action_number == 'putUnderQuarantine':
 
         if any(isinstance(x, Quarantine) for x in city.events):
             pass
 
         else:
             rounds = PutUnderQuarantine.calculateRounds(points)
-            action = PutUnderQuarantine(city, rounds)
-            if action.getPoints() < points:
-                return action
-            else:
-                # print('Not enough points')
+            if rounds < 2:
                 return EndRound()
+            else:
+                action = PutUnderQuarantine(city, rounds)
+                if action.getPoints() < points:
+                    return action
+                else:
+                    # print('Not enough points')
+                    return EndRound()
 
-    # Removing the current best action if the choosed action was not possible
-    sorted_action_numbers.remove(action_number)
+    # Removing the current best action if the chosen action was not possible
+    index = numpy.argwhere(sorted_action_numbers==action_number)
+    sorted_action_numbers = numpy.delete(sorted_action_numbers, index)
+
     try:
         # Pick the next best action
         action_number = sorted_action_numbers[0]

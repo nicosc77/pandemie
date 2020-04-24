@@ -13,6 +13,10 @@ joblib = "*"
 flake8 = "*"
 Flask = "*"
 Keras = "*"
+pandas = "*"
+sklearn = "*"
+tensorflow-hub = ">=0.3"
+flask-restplus = "*"
 
 [requires]
 python_version = "3.7"

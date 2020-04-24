@@ -9,10 +9,11 @@ from model.events import Quarantine, ConnectionClosed, VaccineInDevelopment, \
     MedicationInDevelopment, MedicationAvailable, Outbreak
 
 
-def next_action(city, points, global_events, cities):
-    action = EndRound()
-
-    rand = random.randint(0, 8)
+def next_action(city, game_round):
+    points = game_round.points
+    global_events = game_round.events,
+    cities = game_round.cities
+    rand = random.randint(0, 12)
     rounds = 1
 
     if rand == 0:
@@ -89,7 +90,7 @@ def next_action(city, points, global_events, cities):
             else:
                 return EndRound()
 
-    elif rand == 7:
+    elif rand == 7 or rand == 9 or rand == 11:
         for x in city.events:
             if isinstance(x, Outbreak):
                 for y in global_events:
@@ -108,7 +109,7 @@ def next_action(city, points, global_events, cities):
                     return action
                 else:
                     return EndRound()
-    elif rand == 8:
+    elif rand == 8 or rand == 10 or rand == 12:
         for x in city.events:
             if isinstance(x, Outbreak):
                 for y in global_events:

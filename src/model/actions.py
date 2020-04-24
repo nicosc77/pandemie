@@ -10,7 +10,7 @@ class ApplyHygienicMesaures:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+        return 'applyHygienicMeasures'
 
     @staticmethod
     def getPoints():
@@ -28,7 +28,7 @@ class CallElections:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+        return "callElections"
 
     @staticmethod
     def getPoints():
@@ -44,7 +44,7 @@ class CloseAirport:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+        return "closeAirport"
 
     def getMessage(self):
         return '{"type":"closeAirport", "city": "' + str(
@@ -74,7 +74,7 @@ class CloseConnection:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+        return "closeConnection"
 
     def getMessage(self):
         return '{"type":"closeConnection", "fromCity": "' + str(
@@ -104,7 +104,7 @@ class DeployMedication:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+        return "medication"
 
     def getMessage(self):
         return '{"type":"deployMedication", "pathogen":"' + str(
@@ -125,7 +125,7 @@ class DeployVaccine:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        return "vaccine"
 
     def getMessage(self):
         return '{"type":"deployVaccine", "pathogen":"' + str(
@@ -144,7 +144,7 @@ class DevelopMedication:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+        return "medication"
 
     def getMessage(self):
         return '{"type":"developMedication", "pathogen":"' + str(
@@ -163,7 +163,7 @@ class DevelopVaccine:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        return "vaccine"
 
     def getMessage(self):
         return '{"type":"developVaccine", "pathogen":"' + str(
@@ -182,7 +182,7 @@ class EndRound:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+        return "endRound"
 
     @staticmethod
     def getPoints():
@@ -200,7 +200,7 @@ class ExertInfluence:
 
     @staticmethod
     def getLabel():
-        return [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+        return "exertInfluence"
 
     @staticmethod
     def getPoints():
@@ -218,7 +218,7 @@ class LaunchCampaign:
 
     @staticmethod
     def getLabel():
-        return [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+        return "launchCampaign"
 
     @staticmethod
     def getPoints():
@@ -234,7 +234,7 @@ class PutUnderQuarantine:
 
     @staticmethod
     def getLabel():
-        return [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return "putUnderQuarantine"
 
     def getMessage(self):
         return '{"type":"putUnderQuarantine", "city": "' + str(
