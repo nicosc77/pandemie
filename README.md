@@ -1,6 +1,3 @@
-<p align="center">
-    <img alt="Pandemie" src="https://nicolas-schaber.de/assets/logo.png" width="200" />
-</p>
 <h1 align="center">
   Pandemie
 </h1>
@@ -14,10 +11,10 @@ Dieses Repository beeinhaltet die Lösung für den InformatiCup 2020 des Teams N
 Repository der Aufgabe: https://github.com/informatiCup/informatiCup2020
 </p>
 <p align="center">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/nicosc77/pandemie?style=for-the-badge">
- <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/flask?color=lightgrey&style=for-the-badge">
-  <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/tensorflow?color=yellow&style=for-the-badge">
-  <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/keras?color=red&style=for-the-badge">
+    <a href="https://www.python.org/"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/nicosc77/pandemie?style=for-the-badge"></a>
+ <a href="https://github.com/pallets/flask"> <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/flask?color=lightgrey&style=for-the-badge"></a>
+  <a href="https://github.com/tensorflow/tensorflow"> <img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/tensorflow?color=yellow&style=for-the-badge"></a>
+  <a href="https://github.com/keras-team/keras"><img alt="GitHub Pipenv locked dependency version" src="https://img.shields.io/github/pipenv/locked/dependency-version/nicosc77/pandemie/keras?color=red&style=for-the-badge"></a>
 </p>
 
 ## 🚀 Deployment
@@ -29,13 +26,10 @@ Mithilfe des Dockerfile im Root-Verzeichnis des Projekt lässt sich ein Image ba
   docker run -p 5000:5000 -d pandemie
   ```
 
-- **Cloud-Plattform:**
- Zudem besteht die Möglichkeit die bereits laufende Anwendung über das Internet zu verwenden. Wir lassen dazu den Docker-Container auf einem Google Kubernetes Engine Cluster laufen. Die Anwendung hier ist unter der URL http://pandemie.nicolas-schaber.de zu erreichen.
-
 ## 🔧Testen
-Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL (Je nach Deployment-Methode) der Anwendung aus. Auf Unix- System muss das Tool eventuell zuerst ausführbar gemacht werden.
+Mithilfe der aktuellsten Version des Kommandozeilen-Tools aus dem Repository des Wettbewerbs kann mit der Software ein Spiel gespielt werden. Dazu führt man das Tool mit Angabe der URL der Anwendung aus. Auf Unix-Systemen muss das Tool eventuell zuerst ausführbar gemacht werden.
 
-Hier z.B. für das lokale Deployment:
+Hier z.B. mit der URL für das lokale Deployment:
 - **Windows:**
   ```shell
   ic20_windows.exe -u "http://localhost:5000"
@@ -49,7 +43,7 @@ Hier z.B. für das lokale Deployment:
   ./ic20_darwin -u "http://localhost:5000"
   ```
 
-Anschließend spielt das Tool gegen unsere KI der Software ein Spiel. Nachdem entweder gewonnen oder verloren wurde wird das Tool beendet. Im Feld "outcome" lässt sich der Ausgang des Spiels durch "win" oder "loss" feststellen.
+Anschließend spielt das Tool gegen unsere KI der Software ein Spiel. Nachdem entweder gewonnen oder verloren wurde wird das Tool beendet. Im Feld "outcome" des Spiele-Logs lässt sich der Ausgang des Spiels durch "win" oder "loss" feststellen.
 
 ## 📄Dokumentation
 Genauere Informationen zu dieser Software ist in der [Dokumentation](Dokumentation.pdf) zu finden.
