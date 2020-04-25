@@ -16,54 +16,49 @@ class Solver:
     def __init__(self):
         self.encoder = LabelEncoder()
         self.model = Model()
-
-    def test(self, game_round):
-        top_city = sorted(game_round.cities, key=lambda city: city.score, reverse=True).pop(1)
-        result = self.model.predict(top_city)
-        sorted_action_numbers = (result[0].argsort()[::-1]).tolist()
-        path = str(
-            Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + '/models/'
-
-        self.encoder.classes_ = numpy.load(path + 'classes.npy', allow_pickle=True)
-        prediction = self.encoder.inverse_transform(sorted_action_numbers)
-        return process_number(prediction, top_city, game_round.events, game_round.points,
-                              game_round.round, game_round.cities)
+        self.batch_size = 32
+        self.test_size = 0.2
+        self.data_path = str(Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + '/models/data.csv'
+        self.classes_path = str(Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + '/models/classes.npy'
 
     def train(self):
-        path = str(
-            Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + '/models/'
+        dataframe = read_csv(self.data_path)
 
-        dataframe = read_csv(path + 'data.csv')
+        train, test = train_test_split(dataframe, test_size=self.test_size)
+        train, val = train_test_split(train, test_size=self.test_size)
 
-        train, test = train_test_split(dataframe, test_size=0.2)
-        train, val = train_test_split(train, test_size=0.2)
+        train_dataset = self.df_to_dataset(train)
+        validation_dataset = self.df_to_dataset(val)
+        test_dataset = self.df_to_dataset(test)
 
-        batch_size = 32
-        train_dataset = self.df_to_dataset(train, batch_size=batch_size)
-        validation_dataset = self.df_to_dataset(val, shuffle=False, batch_size=batch_size)
-        test_dataset = self.df_to_dataset(test, shuffle=False, batch_size=batch_size)
-
-        self.model.train_net(train_dataset=train_dataset,
-                             validation_dataset=validation_dataset)
+        self.model.train_net(train_dataset=train_dataset,validation_dataset=validation_dataset)
 
         self.model.evaluate_net(test_dataset=test_dataset)
 
-    def df_to_dataset(self, dataframe, shuffle=True, batch_size=32):
+    def test(self, game_round):
+        top_city = get_top_city(game_round)
+
+        encoded_prediction = self.model.predict(top_city)
+        sorted_encoded_prediction = (encoded_prediction[0].argsort()[::-1]).tolist()
+
+        self.encoder.classes_ = numpy.load(self.classes_path, allow_pickle=True)
+        sorted_prediction = self.encoder.inverse_transform(sorted_encoded_prediction)
+        return process_number(sorted_prediction, top_city, game_round)
+
+    def df_to_dataset(self, dataframe, shuffle=True):
         dataframe = dataframe.copy()
         labels = dataframe.pop('action')
 
         self.encoder.fit(labels)
         encoded_labels = self.encoder.transform(labels)
         encoded_labels = np_utils.to_categorical(encoded_labels)
-        path = str(
-            Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + '/models/'
 
-        numpy.save(path + 'classes.npy', self.encoder.classes_)
+        numpy.save(self.classes_path, self.encoder.classes_)
 
         ds = Dataset.from_tensor_slices((dict(dataframe), encoded_labels))
 
         if shuffle:
             ds = ds.shuffle(buffer_size=len(dataframe))
 
-        ds = ds.batch(batch_size)
+        ds = ds.batch(self.batch_size)
         return ds

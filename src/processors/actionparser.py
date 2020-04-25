@@ -22,12 +22,12 @@ def process_number(predictions, city, global_events, points, current_round, citi
     return choose(sorted_action_numbers[0], city, global_events, points, cities)
 
 
-def choose(action_number, city, global_events, points, cities):
+def choose(action, city, global_events, points, cities):
     global sorted_action_numbers
 
     rounds = 1
 
-    if action_number == 'applyHygienicMeasures':
+    if action == 'applyHygienicMeasures':
         # Action: Apply hygienic measures
 
         if city.hygiene == '++' or city.hygiene == '++':
@@ -44,7 +44,7 @@ def choose(action_number, city, global_events, points, cities):
                 # Saving the points if not enough available
                 return EndRound()
 
-    elif action_number == 'callElections':
+    elif action == 'callElections':
         # Action: Call elections
 
         if city.government == '++' or city.government == '++':
@@ -61,7 +61,7 @@ def choose(action_number, city, global_events, points, cities):
                 # Saving the points if not enough available
                 return EndRound()
 
-    elif action_number == 'closeAirport':
+    elif action == 'closeAirport':
         # Action: Close Airport
 
         if any(isinstance(x, AirportClosed) for x in city.events):
@@ -84,7 +84,7 @@ def choose(action_number, city, global_events, points, cities):
                     # Saving the points if not enough available
                     return EndRound()
 
-    elif action_number == 'closeConnection':
+    elif action == 'closeConnection':
         # Action: Close Airport Connection
 
         if any(isinstance(x, AirportClosed) for x in city.events):
@@ -115,10 +115,10 @@ def choose(action_number, city, global_events, points, cities):
                                         reverse=True).pop(1)
                 except IndexError:
                     # If no connection is suitable choose another action
-                    index = numpy.argwhere(sorted_action_numbers == action_number)
+                    index = numpy.argwhere(sorted_action_numbers == action)
                     sorted_action_numbers = numpy.delete(sorted_action_numbers, index)
-                    action_number = sorted_action_numbers[0]
-                    return choose(action_number, city, global_events, points,
+                    action = sorted_action_numbers[0]
+                    return choose(action, city, global_events, points,
                                   cities)
 
                 # Calculating maximal amount of rounds
@@ -134,7 +134,7 @@ def choose(action_number, city, global_events, points, cities):
                     # Saving the points if not enough available
                     return EndRound()
 
-    elif action_number == 'medication':
+    elif action == 'medication':
         # Action: Develop/Deploy Medication
 
         outbreaks = []
@@ -199,7 +199,7 @@ def choose(action_number, city, global_events, points, cities):
                     else:
                         return EndRound()
 
-    elif action_number == 'vaccine':
+    elif action == 'vaccine':
         # Action: Develop/Deploy Vaccine
 
         outbreaks = []
@@ -265,7 +265,7 @@ def choose(action_number, city, global_events, points, cities):
                     else:
                         return EndRound()
 
-    elif action_number == 'exertInfluence':
+    elif action == 'exertInfluence':
 
         if city.economy == '++' or city.economy == '++':
             pass
@@ -277,7 +277,7 @@ def choose(action_number, city, global_events, points, cities):
                 # print('Not enough points')
                 return EndRound()
 
-    elif action_number == 'launchCampaign':
+    elif action == 'launchCampaign':
 
         if city.awareness == '++' or city.awareness == '+':
             pass
@@ -289,7 +289,7 @@ def choose(action_number, city, global_events, points, cities):
                 # print('Not enough points')
                 return EndRound()
 
-    elif action_number == 'putUnderQuarantine':
+    elif action == 'putUnderQuarantine':
 
         if any(isinstance(x, Quarantine) for x in city.events):
             pass
@@ -307,14 +307,14 @@ def choose(action_number, city, global_events, points, cities):
                     return EndRound()
 
     # Removing the current best action if the chosen action was not possible
-    index = numpy.argwhere(sorted_action_numbers==action_number)
+    index = numpy.argwhere(sorted_action_numbers == action)
     sorted_action_numbers = numpy.delete(sorted_action_numbers, index)
 
     try:
         # Pick the next best action
-        action_number = sorted_action_numbers[0]
+        action = sorted_action_numbers[0]
         # Restart the method with this action
-        return choose(action_number, city, global_events, points, cities)
+        return choose(action, city, global_events, points, cities)
     except IndexError:
         # If no action was suitable
         return EndRound()

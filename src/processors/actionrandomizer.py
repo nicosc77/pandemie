@@ -109,6 +109,7 @@ def next_action(city, game_round):
                     return action
                 else:
                     return EndRound()
+
     elif rand == 8 or rand == 10 or rand == 12:
         for x in city.events:
             if isinstance(x, Outbreak):
