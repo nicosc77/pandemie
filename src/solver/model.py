@@ -83,7 +83,7 @@ class Model:
         loss, accuracy = self.net.evaluate(test_dataset)
         print("Accuracy", accuracy)
 
-    def test(self, top_city):
+    def test_net(self, top_city):
         values = array([top_city.hygiene, top_city.government, top_city.awareness,
                         top_city.economy, top_city.population, len(top_city.connections)])
         columns = ['hygiene', 'government', 'awareness', 'economy', 'population', 'connections']

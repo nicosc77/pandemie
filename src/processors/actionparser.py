@@ -1,25 +1,22 @@
 import numpy
 
-from model.actions import ApplyHygienicMesaures, CloseAirport, CallElections, \
-    DeployMedication, DeployVaccine, \
-    DevelopMedication, DevelopVaccine, LaunchCampaign, PutUnderQuarantine, \
-    EndRound, ExertInfluence, CloseConnection
-from model.events import Quarantine, ConnectionClosed, VaccineInDevelopment, \
-    VaccineAvailable, \
-    MedicationInDevelopment, MedicationAvailable, AirportClosed, Outbreak
+from src.model.actions import EndRound, PutUnderQuarantine, LaunchCampaign, ExertInfluence, DevelopVaccine, \
+    DeployVaccine, DevelopMedication, DeployMedication, CloseConnection, CloseAirport, CallElections, \
+    ApplyHygienicMesaures
+from src.model.events import Quarantine, VaccineInDevelopment, VaccineAvailable, MedicationInDevelopment, \
+    MedicationAvailable, Outbreak, ConnectionClosed, AirportClosed
 
-# The sorted predictions
 sorted_action_numbers = []
 
 
 # Extract the predictions into a sorted array
-def process_number(predictions, city, global_events, points, current_round, cities):
+def process_number(sorted_prediction, top_city, game_round):
     global sorted_action_numbers
 
-    sorted_action_numbers = predictions
+    sorted_action_numbers = sorted_prediction
 
     # Start recursive action search
-    return choose(sorted_action_numbers[0], city, global_events, points, cities)
+    return choose(sorted_action_numbers[0], top_city, game_round.events, game_round.points, game_round.cities)
 
 
 def choose(action, city, global_events, points, cities):

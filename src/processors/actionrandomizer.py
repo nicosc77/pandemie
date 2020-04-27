@@ -9,7 +9,7 @@ from model.events import Quarantine, ConnectionClosed, VaccineInDevelopment, \
     MedicationInDevelopment, MedicationAvailable, Outbreak
 
 
-def next_action(city, game_round):
+def get_next_action(city, game_round):
     points = game_round.points
     global_events = game_round.events,
     cities = game_round.cities

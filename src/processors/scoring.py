@@ -120,5 +120,6 @@ def parse_letter(letter: str, multplicator: float = 1) -> float:
         output = 1
     return output * multplicator
 
+
 def get_top_city(game_round):
     return sorted(game_round.cities, key=lambda city: city.score, reverse=True).pop(1)

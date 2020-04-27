@@ -10,15 +10,18 @@ class Collector:
     def __init__(self):
         self.previous_city = {}
         self.previous_action = {}
+        self.previous_round = 1
 
     def collect(self, game_round):
-        if self.previous_city:
-            current_city = self.get_new_stats()
+        if game_round.round > self.previous_round:
+            if self.previous_city:
+                current_city = self.get_new_stats()
 
-            if current_city.score + 0.3 < self.previous_city.score:
-                if not isinstance(self.previous_action, EndRound):
-                    self.save_asset()
+                if current_city.score + 0.3 < self.previous_city.score:
+                    if not isinstance(self.previous_action, EndRound):
+                        self.save_asset()
 
+        self.previous_round = game_round.round
         top_city = get_top_city(game_round)
         self.previous_city = top_city
         self.previous_action = get_next_action(top_city, game_round)

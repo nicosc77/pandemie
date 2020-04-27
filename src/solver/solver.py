@@ -10,6 +10,8 @@ from tensorflow_core.python.data import Dataset
 from processors.actionparser import process_number
 from solver.model import Model
 
+from src.processors.scoring import get_top_city
+
 
 class Solver:
 
@@ -38,7 +40,7 @@ class Solver:
     def test(self, game_round):
         top_city = get_top_city(game_round)
 
-        encoded_prediction = self.model.predict(top_city)
+        encoded_prediction = self.model.test_net(top_city)
         sorted_encoded_prediction = (encoded_prediction[0].argsort()[::-1]).tolist()
 
         self.encoder.classes_ = numpy.load(self.classes_path, allow_pickle=True)
