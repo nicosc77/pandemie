@@ -1,12 +1,12 @@
 from model.events import Outbreak, BioTerrorrism, MedicationDeployed, \
     VaccineDeployed, AntiVaccinationism, LargeScalePanic, Quarantine, \
     EconomicCrisis, ConnectionClosed, \
-    AirportClosed, Uprising
+    AirportClosed, Uprising, MedicationInDevelopment, MedicationAvailable, VaccineInDevelopment, VaccineAvailable
 
 
 def score(game_round):
     for city in game_round.cities:
-        city.score = process_city(city, game_round.events)
+        city.score = score_city(city, game_round.events)
     return sortCities(game_round)
 
 
@@ -16,7 +16,7 @@ def sortCities(game_round):
     return game_round
 
 
-def process_city(city, global_events):
+def score_city(city, global_events):
     hygiene = parse_letter(city.hygiene, 1.15)
     awareness = parse_letter(city.awareness, 1.092)
     economy = parse_letter(city.economy, 0.72)
@@ -67,7 +67,6 @@ def process_city(city, global_events):
         population = 0.1
 
     pathogen = 0
-
     for x in city.events:
         if isinstance(x, Outbreak):
             pathogen += (parse_letter(x.pathogen.infectivity) + parse_letter(
@@ -79,6 +78,8 @@ def process_city(city, global_events):
                 x.pathogen.mobility) + parse_letter(
                 x.pathogen.duration) + parse_letter(
                 x.pathogen.lethality) * population
+
+    for x in city.events:
         if isinstance(x, Uprising):
             government = government * 2 * (x.participants / city.population)
         if isinstance(x, AirportClosed):
@@ -96,12 +97,18 @@ def process_city(city, global_events):
             economy = economy * 2 * population
             government = government * 1.5 * population
         if isinstance(x, VaccineDeployed):
-            pathogen = pathogen * 0.7
+            pathogen = pathogen * 0.4
         if isinstance(x, MedicationDeployed):
+            pathogen = pathogen * 0.5
+
+    for x in global_events:
+        if isinstance(x, MedicationInDevelopment) or isinstance(x, MedicationAvailable):
+            pathogen = pathogen * 0.7
+        if isinstance(x, VaccineInDevelopment) or isinstance(x, VaccineAvailable):
             pathogen = pathogen * 0.8
 
     scores = [hygiene * 1.15, economy * 1.15, awareness * 1.15, government * 1.15, connections,
-              population * 1.5, pathogen * 2]
+              population * 1.5, pathogen * 2.15]
 
     return sum(scores)
 

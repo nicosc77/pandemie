@@ -22,6 +22,7 @@ collector = Collector()
 # Endpoint for collecting training data with random game actions
 @app.route('/collect', methods=['POST'])
 def collect_model():
+
     if app.debug:
         if request.method == 'POST':
             # Parsing Data
@@ -38,9 +39,12 @@ def collect_model():
             action = collector.collect(game_round)
 
             # Returning the action
-            return action.getMessage()
+            message = action.getMessage()
+            log.info('Action is' + str(message))
+            return message
     else:
         return 'This endpoint is only available in development mode'
+
 
 # Main endpoint for production
 @app.route('/', methods=['POST', 'GET'])
@@ -54,11 +58,16 @@ def main():
     if request.method == 'POST':
         # Parsing Data & Calculating scores
         game_round = score(GameRound(request.json))
+        log.info('Receiving request to play round ' + str(
+            game_round.round) + ' of a game')
 
         # Compute the action
         action = solver.test(game_round)
+
         # Returning the action
-        return action.getMessage()
+        message = action.getMessage()
+        log.info('Action is' + str(message))
+        return message
 
 
 if __name__ == '__main__':

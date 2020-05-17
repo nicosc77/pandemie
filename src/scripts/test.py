@@ -13,7 +13,8 @@ else:
            '/bin/ic20_windows'
 
 results = []
-for i in range(10):
+for i in range(50):
+    print(i)
     process = subprocess.run([path, '-u',
                               'http://localhost:' + str(
                                   5000) + '/', '-t',

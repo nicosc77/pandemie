@@ -1,9 +1,8 @@
 import numpy
 
-from src.model.actions import EndRound, PutUnderQuarantine, LaunchCampaign, ExertInfluence, DevelopVaccine, \
-    DeployVaccine, DevelopMedication, DeployMedication, CloseConnection, CloseAirport, CallElections, \
-    ApplyHygienicMesaures
-from src.model.events import Quarantine, VaccineInDevelopment, VaccineAvailable, MedicationInDevelopment, \
+from model.actions import EndRound, PutUnderQuarantine, LaunchCampaign, ExertInfluence, DevelopVaccine, DeployVaccine, \
+    DevelopMedication, DeployMedication, CloseConnection, CloseAirport, CallElections, ApplyHygienicMesaures
+from model.events import Quarantine, VaccineInDevelopment, VaccineAvailable, MedicationInDevelopment, \
     MedicationAvailable, Outbreak, ConnectionClosed, AirportClosed
 
 sorted_action_numbers = []
@@ -16,12 +15,15 @@ def process_number(sorted_prediction, top_city, game_round):
     sorted_action_numbers = sorted_prediction
 
     # Start recursive action search
-    return choose(sorted_action_numbers[0], top_city, game_round.events, game_round.points, game_round.cities)
+    return choose(sorted_action_numbers[0], top_city, game_round)
 
 
-def choose(action, city, global_events, points, cities):
+def choose(action, city, game_round):
     global sorted_action_numbers
 
+    points = game_round.points
+    global_events = game_round.events
+    cities = game_round.cities
     rounds = 1
 
     if action == 'applyHygienicMeasures':
@@ -115,8 +117,7 @@ def choose(action, city, global_events, points, cities):
                     index = numpy.argwhere(sorted_action_numbers == action)
                     sorted_action_numbers = numpy.delete(sorted_action_numbers, index)
                     action = sorted_action_numbers[0]
-                    return choose(action, city, global_events, points,
-                                  cities)
+                    return choose(action, city, game_round)
 
                 # Calculating maximal amount of rounds
                 rounds = CloseConnection.calculateRounds(points)
@@ -311,7 +312,7 @@ def choose(action, city, global_events, points, cities):
         # Pick the next best action
         action = sorted_action_numbers[0]
         # Restart the method with this action
-        return choose(action, city, global_events, points, cities)
+        return choose(action, city, game_round)
     except IndexError:
         # If no action was suitable
         return EndRound()

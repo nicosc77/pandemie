@@ -2,7 +2,8 @@ import platform
 import subprocess
 from pathlib import Path
 
-for i in range(100):
+for i in range(5000):
+    print(i)
     if platform.system() == 'Darwin':
         path = str(Path(__file__).parent.absolute().parent.absolute().parent.absolute()) + \
                '/bin/ic20_darwin'

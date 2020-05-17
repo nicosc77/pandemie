@@ -7,10 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow_core.python.data import Dataset
 
-from processors.actionparser import process_number
-from solver.model import Model
-
+from src.processors.actionparser import process_number
 from src.processors.scoring import get_top_city
+from src.solver.model import Model
 
 
 class Solver:

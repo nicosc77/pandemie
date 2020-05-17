@@ -14,6 +14,9 @@ from tensorflow.keras.losses import CategoricalCrossentropy
 from tensorflow.keras.models import load_model, save_model
 from tensorflow_core.python.data import Dataset
 
+from model.events import Outbreak
+
+
 class Model:
 
     def __init__(self):
@@ -50,9 +53,22 @@ class Model:
                                              normalizer_fn=connections_normalizer,
                                              shape=[1])
 
+    def get_infections_column(self):
+        infections_desc = pandas.read_csv(self.data_path)['infections'].describe()
+        infections_MEAN = numpy.array(infections_desc.T['mean'])
+        infections_STD = numpy.array(infections_desc.T['std'])
+
+        def infections_normalizer(data):
+            return (data - infections_MEAN) / infections_STD
+
+        return feature_column.numeric_column('infections',
+                                             normalizer_fn=infections_normalizer,
+                                             shape=[1])
+
     def train_net(self, train_dataset, validation_dataset):
 
-        feature_columns = [self.get_population_column(),
+        feature_columns = [self.get_infections_column(),
+                           self.get_population_column(),
                            self.get_connections_column(),
                            get_awareness_column(),
                            get_hygiene_column(),
@@ -84,13 +100,20 @@ class Model:
         print("Accuracy", accuracy)
 
     def test_net(self, top_city):
+        infections = 0
+
+        for x in top_city.events:
+            if isinstance(x, Outbreak):
+                infections = x.prevalence * top_city.population
+
         values = array([top_city.hygiene, top_city.government, top_city.awareness,
-                        top_city.economy, top_city.population, len(top_city.connections)])
-        columns = ['hygiene', 'government', 'awareness', 'economy', 'population', 'connections']
+                        top_city.economy, top_city.population, len(top_city.connections), round(infections)])
+        columns = ['hygiene', 'government', 'awareness', 'economy', 'population', 'connections', 'infections']
 
         dataframe = DataFrame(values.reshape(-1, len(values)), columns=columns)
         dataframe['population'] = to_numeric(dataframe['population'])
         dataframe['connections'] = to_numeric(dataframe['connections'])
+        dataframe['infections'] = to_numeric(dataframe['infections'])
         ds = Dataset.from_tensor_slices((dict(dataframe)))
         ds = ds.batch(1)
         return self.net.predict(ds)
