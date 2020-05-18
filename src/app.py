@@ -1,7 +1,4 @@
 import logging
-import platform
-import subprocess
-from pathlib import Path
 
 from flask import Flask, request
 
@@ -68,4 +65,4 @@ def main():
 if __name__ == '__main__':
     debug_env = True
     log.setLevel(logging.INFO)
-    app.run(debug=debug_env, port=5000)
+    app.run(debug=debug_env, host="0.0.0.0", port=5000)

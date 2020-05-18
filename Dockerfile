@@ -1,10 +1,8 @@
 FROM python:3.7
 
 # Install dependecies
-COPY Pipfile* /tmp/
-RUN pip install --quiet --no-cache --upgrade pipenv
-RUN cd /tmp && pipenv lock --requirements > requirements.txt
-RUN pip install --quiet --no-cache  -r /tmp/requirements.txt
+COPY requirements.txt .
+RUN pip install -r ./requirements.txt
 
 # Adding user
 RUN useradd --create-home appuser
@@ -21,4 +19,4 @@ COPY ./models/ ./models
 
 # Execute
 EXPOSE 5000
-CMD ./src/app.py
+CMD python3 ./src/app.py
