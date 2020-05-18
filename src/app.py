@@ -15,14 +15,13 @@ app = Flask(__name__)
 # Default configurations
 port = 5000
 log = logging.getLogger('werkzeug')
-solver = Solver()
 collector = Collector()
+solver = Solver()
 
 
 # Endpoint for collecting training data with random game actions
 @app.route('/collect', methods=['POST'])
 def collect_model():
-
     if app.debug:
         if request.method == 'POST':
             # Parsing Data
@@ -49,12 +48,7 @@ def collect_model():
 # Main endpoint for production
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    # Very ugly workaround because keras in this version
-    # is messing up with tensorflow when multithreading is enabled
-    import keras.backend.tensorflow_backend as tb
-    # noinspection PyProtectedMember
-    tb._SYMBOLIC_SCOPE.value = True
-
+    global solver
     if request.method == 'POST':
         # Parsing Data & Calculating scores
         game_round = score(GameRound(request.json))
@@ -67,17 +61,11 @@ def main():
         # Returning the action
         message = action.getMessage()
         log.info('Action is' + str(message))
+
         return message
 
 
 if __name__ == '__main__':
-    debug_env = False
-    try:
-
-        debug_env = True
-        log.setLevel(logging.INFO)
-
-    except KeyError:
-        pass
-
+    debug_env = True
+    log.setLevel(logging.INFO)
     app.run(debug=debug_env, port=5000)

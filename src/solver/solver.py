@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow_core.python.data import Dataset
 
-from src.processors.actionparser import process_number
-from src.processors.scoring import get_top_city
-from src.solver.model import Model
+from processors.actionparser import process_number
+from processors.scoring import get_top_city
+from solver.model import Model
 
 
 class Solver:
@@ -37,6 +37,7 @@ class Solver:
         self.model.evaluate_net(test_dataset=test_dataset)
 
     def test(self, game_round):
+
         top_city = get_top_city(game_round)
 
         encoded_prediction = self.model.test_net(top_city)

@@ -12,14 +12,13 @@ USER appuser
 
 # Set up environment
 WORKDIR /home/appuser
-ENV DEBUG=False
-ENV FLASK_ENV=production
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV DEBUG=True
+ENV FLASK_ENV=development
 
 # Copy source
-COPY ./src .
+COPY ./src/ ./src
+COPY ./models/ ./models
 
 # Execute
 EXPOSE 5000
-CMD gunicorn --timeout 1000 --workers 4 --threads 4 --preload --log-level error --bind 0.0.0.0:5000 app:app
+CMD ./src/app.py
